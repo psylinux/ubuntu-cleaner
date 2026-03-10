@@ -13,6 +13,7 @@ Ele foi pensado para rodar na sua maquina Ubuntu local e pode instalar as depend
 
 - `dry-run` por padrao.
 - instalacao de dependencias de runtime com `--install-deps`.
+- atalho `--apply-all` para a limpeza completa local.
 - `df -h` antes e depois da limpeza.
 - total real liberado ao final, por filesystem e no total.
 - modo `--analyze` com `df -hT`, `df -hi`, maiores diretorios e arquivos grandes.
@@ -29,6 +30,7 @@ Analise e simulacao:
 ./ubuntu_cleaner.sh --analyze
 ./ubuntu_cleaner.sh --include-vscode --include-antigravity --include-go
 sudo ./ubuntu_cleaner.sh --install-deps
+sudo ./ubuntu_cleaner.sh --apply-all
 ```
 
 Aplicar limpeza:
@@ -38,6 +40,7 @@ sudo ./ubuntu_cleaner.sh --apply
 sudo ./ubuntu_cleaner.sh --apply --journal-days 7 --snap-retain 3
 sudo ./ubuntu_cleaner.sh --apply --include-vscode --include-antigravity --prune-duplicate-extensions
 sudo ./ubuntu_cleaner.sh --apply --include-go
+sudo ./ubuntu_cleaner.sh --apply-all
 ```
 
 Ajuda completa:
@@ -84,6 +87,7 @@ Estas limpezas so entram quando voce pede explicitamente:
 ## Observacoes
 
 - `--apply` requer `sudo`.
+- `--apply-all` combina `--install-deps`, `--apply`, `--include-vscode`, `--include-antigravity`, `--include-go`, `--include-logs` e `--prune-duplicate-extensions`.
 - `--install-deps` prepara as dependencias de runtime no Ubuntu local.
 - `dry-run` e `--analyze` podem ser usados sem `sudo`.
 - Se VSCode ou Antigravity estiverem abertos, o script avisa antes da limpeza.

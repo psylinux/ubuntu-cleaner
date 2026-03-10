@@ -39,6 +39,7 @@ Padrao:
 
 Opcoes:
   --apply                         Executa a limpeza.
+  --apply-all                     Instala dependencias e executa a limpeza completa.
   --analyze                       Mostra analise detalhada do filesystem.
   --install-deps                  Instala dependencias de runtime no Ubuntu local.
   --include-vscode               Inclui caches do VSCode no home do usuario.
@@ -58,6 +59,7 @@ Exemplos:
   ./ubuntu_cleaner.sh
   ./ubuntu_cleaner.sh --analyze --include-vscode --include-antigravity
   sudo ./ubuntu_cleaner.sh --install-deps
+  sudo ./ubuntu_cleaner.sh --apply-all
   sudo ./ubuntu_cleaner.sh --apply
   sudo ./ubuntu_cleaner.sh --apply --include-vscode --include-antigravity --prune-duplicate-extensions
   sudo ./ubuntu_cleaner.sh --apply --include-go --journal-days 7 --snap-retain 3
@@ -319,17 +321,17 @@ print_dir_breakdown() {
   echo "${label}:"
 
   if cmd_exists timeout; then
-    if output="$(timeout 15s bash -lc 'du -xhd1 "$1" 2>/dev/null | sort -h | tail -n 15' _ "$path" 2>/dev/null)"; then
+    if output="$(timeout 15s du -xhd1 -- "$path" 2>/dev/null | sort -h | tail -n 15)"; then
       :
     else
       output=""
     fi
   else
-    output="$(du -xhd1 "$path" 2>/dev/null | sort -h | tail -n 15 || true)"
+    output="$(du -xhd1 -- "$path" 2>/dev/null | sort -h | tail -n 15 || true)"
   fi
 
   if [[ -n "$output" ]]; then
-    sed 's/^/  /' <<<"$output"
+    printf '  %s\n' "${output//$'\n'/$'\n  '}"
   else
     echo "  indisponivel ou expirou o tempo limite da analise"
   fi
@@ -878,6 +880,15 @@ parse_args() {
     case "$1" in
       --apply)
         APPLY=1
+        ;;
+      --apply-all)
+        APPLY=1
+        INSTALL_DEPS=1
+        INCLUDE_VSCODE=1
+        INCLUDE_ANTIGRAVITY=1
+        INCLUDE_GO=1
+        INCLUDE_LOGS=1
+        PRUNE_DUPLICATE_EXTENSIONS=1
         ;;
       --analyze)
         ANALYZE=1

@@ -9,6 +9,7 @@ setup() {
 
   [ "$status" -eq 0 ]
   [[ "$output" == *"--apply"* ]]
+  [[ "$output" == *"--apply-all"* ]]
   [[ "$output" == *"--analyze"* ]]
   [[ "$output" == *"--install-deps"* ]]
   [[ "$output" == *"--include-vscode"* ]]
